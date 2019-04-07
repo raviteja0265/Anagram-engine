@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <title>Anagram engine home page</title>
+        <meta charset="utf-8"/>
+    </head>
+    <style>
+        p {
+            text-align: center;
+        }
+        body{
+            background-color: #dbe8fc;
+        }
+    </style>
+    <body>
+    <p>Goodbye, you can logout here</p>
+    <p><a href="{{ logout_url }}">Logout</a></p>
+
+    <form action="/" method="post">
+        word: <input type="text" name="word"/><br/>
+        anagram1: <input type="text" name="anagram1"/><br/>
+        anagram2: <input type="text" name="anagram2"/><br/>
+        <input type="submit" name="button" value="Add Anagram"/><br/>
+        <input type="submit" name="button" value="Save Anagram"/>
+    </form>
+
+    {% for i in mywords %}
+    word : {{ i.word }}<br/>
+    {% endfor %}
+    </body>
+</html>
