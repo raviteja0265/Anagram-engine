@@ -54,10 +54,10 @@ class AddPage(webapp2.RequestHandler):
                 if mydictionary_list==None:
                     mydictionary_list_all = MyDictionary(id=mydictionary_key, lexi_order=lexi_order.lower(),
                                                          num_letters=num_letters, count=1)
-                    num_words = myuser.num_words+1
-                    unique = myuser.unique+1
-                    myuser = MyUser(id=user.user_id(), num_words=num_words, unique=unique)
-                    myuser.put()
+                    #num_words = myuser.num_words+1
+                    #unique = myuser.unique+1
+                    #myuser = MyUser(id=user.user_id(), num_words=num_words, unique=unique)
+                    #myuser.put()
                     mydictionary_list_all.word.append(word)
                     mydictionary_list_all.put()
                     self.redirect('/')
@@ -67,11 +67,11 @@ class AddPage(webapp2.RequestHandler):
                     mydictionary_list.count = counter
                     mydictionary_list.word.append(word)
                     mydictionary_list.put()
-                    num_words = myuser.num_words+1
-                    unique = myuser.unique+1
-                    myuser = MyUser(id=user.user_id(), num_words=num_words, unique=unique)
+                    #num_words = myuser.num_words+1
+                    #unique = myuser.unique
+                    #myuser = MyUser(id=user.user_id(), num_words=num_words, unique=unique)
 
-                    myuser.put()
+                    #myuser.put()
                     template_values = {
                         'display': 'successful'
                     }
