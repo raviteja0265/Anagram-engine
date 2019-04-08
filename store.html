@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <title>Store file</title>
+        <meta charset="utf-8"/>
+    </head>
+    <style>
+        h2,h3 {
+            text-align: center;
+        }
+        h4 {
+            text-align: left;
+        }
+        p {
+            text-align: left;
+        }
+        body{
+            background-color: #dbe8fc;
+        }
+    </style>
+    <body>
+    <h2>Goodbye, you can logout under this</h2>
+    <h3><a href="{{ logout_url }}">Logout</a></h3>
+
+    <form action="/store" method="post">
+        Store
+        <input type="file" name="Store File">
+        <input type="submit" name="button" value="store">
+    </form>
+    </body>
+</html>

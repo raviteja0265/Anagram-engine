@@ -6,6 +6,8 @@ from google.appengine.ext import ndb
 
 from myuser import MyUser
 from mydictionary import MyDictionary
+from addanagram import AddPage
+from store import StoreFile
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -31,11 +33,15 @@ class MainPage(webapp2.RequestHandler):
         myuser_key = ndb.Key('MyUser', user.user_id())
         myuser = myuser_key.get()
         if myuser == None:
-            myuser = MyUser(id=user.user_id())
+            myuser = MyUser(id=user.user_id(), num_words=0, unique=0)
             myuser.put()
 
         template_values = {
-            'logout_url': users.create_logout_url(self.request.url)
+            'logout_url': users.create_logout_url(self.request.url),
+            'user': user,
+            'allvalues': MyDictionary.query().fetch(),
+            'num_words': myuser.num_words,
+            'unique': myuser.unique
         }
 
         template = JINJA_ENVIRONMENT.get_template('homepage.html')
@@ -43,55 +49,36 @@ class MainPage(webapp2.RequestHandler):
 
     def post(self):
         self.response.headers['Content-Type'] = 'text/html'
-
         action = self.request.get('button')
-        if action == 'Save Anagram':
+
+        user = users.get_current_user()
+
+        if action == 'Search':
             word = self.request.get('word')
-            anagram1 = self.request.get('anagram1')
-            anagram2 = self.request.get('anagram2')
-            mydictionary_list = MyDictionary.query()
+            lexi_order = reduce(lambda x, y: x+y, sorted(word))
+            user = users.get_current_user()
+            myuser_key = ndb.Key('MyUser', user.user_id())
+            myuser = myuser_key.get()
+            if word == '':
+                self.redirect('/')
 
-            mydictionary_list = mydictionary_list.fetch()
-
-            user = users.get_current_user
-
-            mydictionary_key = ndb.Key('MyUser', word)
-            mydictionary = mydictionary_key.get()
-
-            mydictionary.mywords.append(mydictionary_list)
-            mydictionary.put()
-
+            else:
+                mydictionary_key = user.user_id() + lexi_order
+                mydictionary_list = ndb.Key(MyDictionary, mydictionary_key)
+                mydictionary_list_all = mydictionary_list.get()
             template_values = {
-                'mydictionary_list': mydictionary_list,
-                'anagram1': anagram1,
-                'anagram2': anagram2
+                'allvalues': mydictionary_list_all,
+                'user': user,
+                'num_words': myuser.num_words,
+                'unique': myuser.unique
             }
 
             template = JINJA_ENVIRONMENT.get_template('homepage.html')
             self.response.write(template.render(template_values))
 
-    def post(self):
-        self.response.headers['Content-Type'] = 'text/html'
-        action = self.request.get('button')
-        if action == 'Save Anagram':
-            word = self.request.get('word')
-            anagram1 = self.request.get('anagram1')
-            anagram2 = self.request.get('anagram2')
-
-            user = users.get_current_user()
-
-            myuser_key = ndb.Key('MyUser', user.user_id())
-            myuser = myuser_key.get()
-            mydictionary_key = ndb.Key('MyDictionary', word)
-            mydictionary = mydictionary_key.get()
-            if mydictionary == None:
-                new_word = MyDictionary(word=word, anagram1=anagram1, anagram2=anagram2)
-                myuser.mywords.append(new_word)
-                new_word.put()
-
-                self.redirect('/')
-
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
+    ('/addanagram', AddPage),
+    ('/store', StoreFile)
 ], debug=True)

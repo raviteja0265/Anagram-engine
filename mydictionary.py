@@ -2,6 +2,7 @@ from google.appengine.ext import ndb
 
 
 class MyDictionary(ndb.Model):
-    word = ndb.StringProperty()
-    anagram1 = ndb.StringProperty()
-    anagram2 = ndb.StringProperty()
+    word = ndb.StringProperty(repeated=True)
+    count = ndb.IntegerProperty()
+    num_letters = ndb.IntegerProperty()
+    lexi_order = ndb.StringProperty()

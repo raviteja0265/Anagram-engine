@@ -4,27 +4,42 @@
         <meta charset="utf-8"/>
     </head>
     <style>
-        p {
+        h2,h3 {
             text-align: center;
+        }
+        p {
+            text-align: left;
         }
         body{
             background-color: #dbe8fc;
         }
     </style>
     <body>
-    <p>Goodbye, you can logout here</p>
-    <p><a href="{{ logout_url }}">Logout</a></p>
+    <h2>Goodbye, you can logout under this</h2>
+    <h3><a href="{{ logout_url }}">Logout</a></h3>
+    <div>
+        <p>You can add words to dictionary <a href="/addanagram">here</a></p>
+        <p>store words from file <a href="/store">here</a></p>
 
-    <form action="/" method="post">
-        word: <input type="text" name="word"/><br/>
-        anagram1: <input type="text" name="anagram1"/><br/>
-        anagram2: <input type="text" name="anagram2"/><br/>
-        <input type="submit" name="button" value="Add Anagram"/><br/>
-        <input type="submit" name="button" value="Save Anagram"/>
-    </form>
+        <form action="/" method="post">
+            <div>
+                <input type="text" placeholder="Search here" name="word" pattern="([a-zA-Z]).{2,}">
+            </div>
+            <div>
+                <input type="submit" value="Go" name="button">
+            </div>
+        </form>
+    </div>
 
-    {% for i in mywords %}
-    word : {{ i.word }}<br/>
-    {% endfor %}
+    {{ allvalues.wordSorted }}
+    {% for i in allvalues.word %}
+    {{ i }}<br/>
+
+    {% endfor %}<br/>
+
+    {{ num_words }}<br/>
+
+    {{ unique }}
+
     </body>
 </html>
